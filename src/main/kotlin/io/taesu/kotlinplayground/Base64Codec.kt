@@ -45,9 +45,10 @@ class Base64Codec {
         val buffer = ByteArray(bufferSize)
         var readLength: Int
         while ((inputStream.read(buffer).also { readLength = it }) > 0) {
+            // 반드시 copy가 필요함. readLength가 bufferSize 만큼 채우지 못했다면 이전 단계에서 읽은 디에터가 남아있음
             val tmp = buffer.copyOf(readLength)
             log.info("Read length: ${readLength}, buffer size: ${buffer.size}, tmp size: ${tmp.size}")
-            printWriter.println(String(encoder.encode(tmp), StandardCharsets.UTF_8))
+            printWriter.println(String(encoder.encode(tmp)))
         }
         return encodedFile
     }
